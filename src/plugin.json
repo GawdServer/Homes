@@ -1,0 +1,9 @@
+{
+  "name": "Homes",
+  "version": "1.0",
+  "mainClass": "tk.coolv1994.plugins.homes.Homes",
+  "commands": {
+    "home": "tk.coolv1994.plugins.homes.CommandHome",
+    "sethome": "tk.coolv1994.plugins.homes.CommandSetHome"
+  }
+}
