@@ -1,6 +1,6 @@
 package tk.coolv1994.plugins.homes;
 
-import tk.coolv1994.gawdserver.plugin.Plugin;
+import tk.coolv1994.gawdapi.plugin.Plugin;
 
 import java.io.*;
 import java.util.Properties;
@@ -10,8 +10,25 @@ import java.util.Properties;
  */
 public class Homes implements Plugin {
     private static final File homeFile = new File("./plugins/Homes/homes.txt");
-    public static final Properties homes = new Properties();
+    private static Properties homes;
     public static boolean useBed = false;
+    public static String world = "world";
+
+    public Homes() {
+        homes = new Properties();
+    }
+
+    public static boolean hasHome(String player) {
+        return homes.containsKey(player);
+    }
+
+    public static String getHome(String player) {
+        return homes.getProperty(player);
+    }
+
+    public static void setHome(String player, String coords) {
+        homes.setProperty(player, coords);
+    }
 
     private void loadHomes() {
         try {
@@ -19,6 +36,7 @@ public class Homes implements Plugin {
         } catch (FileNotFoundException e) {
             homeFile.getParentFile().mkdirs();
             homes.setProperty("UseBedAsHome", "false");
+            homes.setProperty("WorldName", "world");
             saveHomes();
         } catch (IOException e) {
             System.out.println("Error loading homes.\n" + e.getMessage());
@@ -37,6 +55,7 @@ public class Homes implements Plugin {
     public void startup() {
         loadHomes();
         useBed = Boolean.parseBoolean(homes.getProperty("UseBedAsHome", "false"));
+        world = homes.getProperty("WorldName", "world");
     }
 
     @Override

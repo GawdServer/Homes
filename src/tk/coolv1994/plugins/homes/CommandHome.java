@@ -1,11 +1,13 @@
 package tk.coolv1994.plugins.homes;
 
+import tk.coolv1994.gawdapi.Gawd;
+import tk.coolv1994.gawdapi.events.Command;
+import tk.coolv1994.gawdapi.perms.Permissions;
+import tk.coolv1994.gawdapi.player.PlayerList;
+import tk.coolv1994.gawdapi.utils.Chat;
+
 import org.jnbt.CompoundTag;
 import org.jnbt.NBTInputStream;
-import tk.coolv1994.gawdserver.events.Command;
-import tk.coolv1994.gawdserver.launcher.Launch;
-import tk.coolv1994.gawdserver.player.PlayerList;
-import tk.coolv1994.gawdserver.utils.Chat;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -17,15 +19,19 @@ import java.io.IOException;
 public class CommandHome implements Command {
     @Override
     public void onCommand(String player, String[] args) {
+        if (!Permissions.hasPermission(player, "homes.use")) {
+            Chat.sendMessage(player, "No permission.");
+            return;
+        }
         if(!Homes.useBed) {
-            if (Homes.homes.containsKey(player)) {
-                Launch.sendCommand(String.format("tp %s %s", player, Homes.homes.getProperty(player)));
+            if (Homes.hasHome(player)) {
+                Gawd.sendCommand(String.format("tp %s %s", player, Homes.getHome(player)));
             } else {
                 Chat.sendMessage(player, "You do not have a home set.");
             }
             return;
         }
-        File playerData = new File("./world/playerdata/" + PlayerList.getUUID(player) + ".dat");
+        File playerData = new File("./" + Homes.world + "/playerdata/" + PlayerList.getUUID(player) + ".dat");
 
         CompoundTag master = null;
         try {
@@ -40,7 +46,7 @@ public class CommandHome implements Command {
             Object x = master.getValue().get("SpawnX").getValue();
             Object y = master.getValue().get("SpawnY").getValue();
             Object z = master.getValue().get("SpawnZ").getValue();
-            Launch.sendCommand("tp " + player + " " + x + " " + y + " " + z);
+            Gawd.sendCommand("tp " + player + " " + x + " " + y + " " + z);
         } else {
             Chat.sendMessage(player, "You do not have a home set.");
         }
