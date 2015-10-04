@@ -1,0 +1,14 @@
+{
+	"commands": {
+		"home": {
+			"description": "Teleport to your home/bed.",
+			"usage": "!home",
+			"permission": "homes.use"
+		},
+		"sethome": {
+			"description": "Set your home location.",
+			"usage": "!sethome <x> <y> <z>",
+			"permission": "homes.set"
+		}
+	}
+}

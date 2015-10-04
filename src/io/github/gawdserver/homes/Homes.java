@@ -1,15 +1,19 @@
-package tk.coolv1994.plugins.homes;
+package io.github.gawdserver.homes;
 
-import tk.coolv1994.gawdapi.plugin.Plugin;
+import io.github.gawdserver.api.plugin.Plugin;
+import io.github.gawdserver.api.plugin.PluginDir;
 
 import java.io.*;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Created by Vinnie on 2/2/2015.
  */
 public class Homes implements Plugin {
-    private static final File homeFile = new File("./plugins/Homes/homes.txt");
+    private static final Logger logger = Logger.getLogger("Homes");
+    private static final File homeFile = new File(PluginDir.getPluginDir(), "Homes/homes.txt");
     private static Properties homes;
     public static boolean useBed = false;
     public static String world = "world";
@@ -38,16 +42,16 @@ public class Homes implements Plugin {
             homes.setProperty("UseBedAsHome", "false");
             homes.setProperty("WorldName", "world");
             saveHomes();
-        } catch (IOException e) {
-            System.out.println("Error loading homes.\n" + e.getMessage());
+        } catch (IOException ex) {
+            logger.log(Level.SEVERE, "Error loading homes.", ex);
         }
     }
 
     private void saveHomes() {
         try {
             homes.store(new FileOutputStream(homeFile), "Player Homes (username=x y z)");
-        } catch (IOException e) {
-            System.out.println("Error saving homes.\n" + e.getMessage());
+        } catch (IOException ex) {
+            logger.log(Level.SEVERE, "Error saving homes.", ex);
         }
     }
 
